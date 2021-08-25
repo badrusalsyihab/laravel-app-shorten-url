@@ -14,6 +14,7 @@ services:
     ports:
       - "8070:80"
 
+  #LARAVEL Service
   app:
     container_name: app_laravel_sample
     build:
@@ -22,4 +23,22 @@ services:
     image: app_laravel:1.0
     volumes:
       - ./:/var/www
+
+
+  #MySQL Service
+  mysql:
+    image: mysql:5.7.29
+    container_name: app_laravel_sample_mysql
+    restart: unless-stopped
+    tty: true
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_DATABASE: laravel
+      MYSQL_USER: homestead
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: secret
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    
 

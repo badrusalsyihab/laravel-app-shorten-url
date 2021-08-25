@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>How to create url shortener using Laravel? - ItSolutionStuff.com</title>
+    <title>Laravel</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" />
 </head>
 <body>
@@ -44,9 +44,9 @@
                 </thead>
                 <tbody>
                    
-                    @foreach($shortLinks as $row)
+                    @foreach($shortLinks as $key => $row)
                         <tr>
-                            <td>{{ $row['id'] }}</td>
+                            <td>{{$key+1}}</td>
                             <td><a href="{{ route('shorten.link', $row['code']) }}" target="_blank">{{ route('shorten.link', $row['code']) }}</a></td>
                             <td>{{ $row['link'] }}</td>
                         </tr>

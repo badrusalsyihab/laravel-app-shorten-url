@@ -49,7 +49,7 @@ class ShortLinkController extends Controller
             //TODO: case pass
             $store = $this->shortLink->store($request->except(['_token']));
             if($store)
-            return redirect('generate-shorten-link')->with('success', 'Shorten Link Generated Successfully!');
+            return Redirect::back()->withSuccess('Shorten Link Generated Successfully!');
 
             return Redirect::back()->withErrors(['Please try again..']);
             

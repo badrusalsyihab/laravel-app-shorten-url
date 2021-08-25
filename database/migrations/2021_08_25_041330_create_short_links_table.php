@@ -14,8 +14,10 @@ class CreateShortLinksTable extends Migration
     public function up()
     {
         Schema::create('short_links', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->bigIncrements('id');  
+            $table->string('code');  
+            $table->string('link');  
+            $table->timestamps();  
         });
     }
 

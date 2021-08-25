@@ -23,8 +23,8 @@ class ShortLinkController extends Controller
      */
     public function index()
     {
-        dd($this->shortLink->getData());
-        return view('front.pages.short_link', $this->shortLink->getData());
+        $data['shortLinks'] = $this->shortLink->getData();
+        return view('front.pages.short_link', $data);
     }
 
    
@@ -39,6 +39,18 @@ class ShortLinkController extends Controller
     {
         //
         dd($request->all());
+    }
+
+
+    /**
+     * Show detail.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function show($code)
+    {
+        return redirect($this->shortLink->getDetail(['code' => $code]));
     }
 
 

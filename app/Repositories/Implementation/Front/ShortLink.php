@@ -5,6 +5,7 @@ namespace App\Repositories\Implementation\Front;
 use App\Repositories\Implementation\BaseImplementation;
 use App\Repositories\Contracts\Front\ShortLink as ShortLinkInterface;
 use App\ShortLink as ShortLinkModels;
+use App\Services\Response as ResponseService;
 use DB;
 use Carbon\Carbon;
 
@@ -12,8 +13,9 @@ class ShortLink implements ShortLinkInterface
 {
     protected $shortLink;
     protected $message;
+    protected $response;
   
-    function __construct(ShortLinkModels $shortLink)
+    function __construct(ShortLinkModels $shortLink, ResponseService $response)
     {
         $this->shortLink = $shortLink;
     }
@@ -47,7 +49,7 @@ class ShortLink implements ShortLinkInterface
             if(!$this->storeData($data))
             {
                 DB::rollBack();
-                return $this->setResponse($this->message, false);
+                return $this->response->setResponse($this->message, false);
             }
 
             DB::commit();
@@ -56,6 +58,18 @@ class ShortLink implements ShortLinkInterface
         } catch (\Exception $e) {
             return $this->setResponse($e->getMessage(), false);
         }
+    }
+
+
+    /**
+     * getDetail data
+     * @param $data
+     * @return array
+     */
+    public function getDetail($params)
+    {
+       $data = $this->shortLink($params, 'asc', 'array', true);
+       return isset($data['link']) ? $data['link'] : ''; 
     }
 
     /**

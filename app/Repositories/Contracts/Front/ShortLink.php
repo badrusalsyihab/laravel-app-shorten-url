@@ -17,4 +17,11 @@ interface ShortLink
      */
     public function store($params);
 
+
+    /**
+     * @param $params
+     * @return mixed
+     */
+    public function getDetail($params);
+
 }

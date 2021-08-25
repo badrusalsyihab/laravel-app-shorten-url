@@ -19,5 +19,9 @@ class ShortLink {
      public function store($params = []) {
           return $this->ShortLink->store($params);
      }
+
+     public function getDetail($params = []) {
+        return $this->ShortLink->getDetail($params);
+   }
    
 }

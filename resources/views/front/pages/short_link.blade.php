@@ -26,7 +26,13 @@
                 <div class="alert alert-success">
                     <p>{{ Session::get('success') }}</p>
                 </div>
-            @endif
+                @endif
+
+                @if($errors->any())
+                <div class="alert alert-success">
+                    <p>{{$errors->first()}}</p>
+                </div>
+                @endif
 
             <table class="table table-bordered table-sm">
                 <thead>

@@ -7,6 +7,7 @@ use App\Repositories\Contracts\Front\ShortLink as ShortLinkInterface;
 use App\ShortLink as ShortLinkModels;
 use App\Services\Response as ResponseService;
 use DB;
+use Illuminate\Support\Str;
 use Carbon\Carbon;
 
 class ShortLink implements ShortLinkInterface
@@ -18,6 +19,7 @@ class ShortLink implements ShortLinkInterface
     function __construct(ShortLinkModels $shortLink, ResponseService $response)
     {
         $this->shortLink = $shortLink;
+        $this->response = $response;
     }
 
     /**
@@ -28,7 +30,7 @@ class ShortLink implements ShortLinkInterface
     public function getData($data)
     {
         $params = [
-            "order_by" => 'created_at',
+            "order_by" => 'id',
         ];
 
         return $this->shortLink($params, 'desc', 'array', false);
@@ -45,18 +47,17 @@ class ShortLink implements ShortLinkInterface
         try {
 
             DB::beginTransaction();
-            
             if(!$this->storeData($data))
             {
                 DB::rollBack();
-                return $this->response->setResponse($this->message, false);
+                return false;
             }
 
             DB::commit();
-            return $this->setResponse('Success store data', true);
+            return true;
 
         } catch (\Exception $e) {
-            return $this->setResponse($e->getMessage(), false);
+            return false;
         }
     }
 
@@ -68,7 +69,7 @@ class ShortLink implements ShortLinkInterface
      */
     public function getDetail($params)
     {
-       $data = $this->shortLink($params, 'asc', 'array', true);
+       $data = $this->shortLink($params, 'desc', 'array', true);
        return isset($data['link']) ? $data['link'] : ''; 
     }
 
@@ -89,7 +90,7 @@ class ShortLink implements ShortLinkInterface
                 $storeObj->updated_at       = Carbon::now();
             }
 
-			$storeObj->code             = isset($data['code']) ? $data['code'] : '';
+			$storeObj->code             = Str::random(6);
             $storeObj->link       		= isset($data['link']) ? $data['link'] : '';
             $storeObj->created_at       = Carbon::now();
            
@@ -121,6 +122,9 @@ class ShortLink implements ShortLinkInterface
             $shortLink->where('id', $params['id']);
         }
 
+        if(isset($params['order_by'])) {
+            $shortLink->orderBy($params['order_by'], $orderType);
+        }
 
         if(isset($params['code'])) {
             $shortLink->where('code', $params['code']);
